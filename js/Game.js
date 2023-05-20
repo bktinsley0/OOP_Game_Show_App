@@ -5,26 +5,27 @@
 class Game {
   constructor() {
     this.missed = 0;
-    this.phrases = [
-      "A Dime a Dozen",
-      "A Piece of Cake",
-      "Back to Square One",
-      "Barking Up The Wrong Tree",
-      "Beating Around the Bush",
+    this.phrase = [
+      new Phrase("A Dime a Dozen"),
+      new Phrase("A Piece of Cake"),
+      new Phrase("Back to Square One"),
+      new Phrase("Barking Up The Wrong Tree"),
+      new Phrase("Beating Around the Bush"),
     ];
     this.activePhrase = null;
   }
   getRandomPhrase() {
-    const randomPhrase = Math.floor(Math.random() * this.phrases.length);
-    return this.phrases[randomPhrase];
+    const randomPhrase = Math.floor(Math.random() * this.phrase.length);
+    return this.phrase[randomPhrase];
   }
+  
   /**
    * Begins game by selecting a random phrase and displaying it to user
    */
   startGame() {
     const overlay = document.querySelector("#overlay");
     overlay.style.display = "none";
-    this.activePhrase = new Phrase(this.getRandomPhrase());
+    this.activePhrase = (this.getRandomPhrase());
     this.activePhrase.addPhraseToDisplay();
   }
   /**
@@ -70,34 +71,35 @@ won
     }
     this.resetGame();
   }
-/**
- * Resets the game board between games
- **/
-    resetGame() {
-        const phraseDiv = document.querySelector("#phrase ul");
-        const keys = document.querySelectorAll(".key");
-        const lives = document.querySelectorAll(".tries img");
-        phraseDiv.innerHTML = "";
-        keys.forEach((key) => {
-            key.className = "key";
-            key.disabled = false;
-        })};
- 
   /**
-* Handles onscreen keyboard button clicks
-* @param (HTMLButtonElement) button - The clicked button element
-*/
-    handleInteraction(button) {
-        button.disabled = true;
-        if (this.activePhrase.checkLetter(button.textContent)) {
-            button.classList.add("chosen");
-            this.activePhrase.showMatchedLetter(button.textContent);
-            if (this.checkForWin()) {
-                this.gameOver(true);
-            }
-        } else {
-            button.classList.add("wrong");
-            this.removeLife();
-        }
+   * Resets the game board between games
+   **/
+  resetGame() {
+    const phraseDiv = document.querySelector("#phrase ul");
+    const keys = document.querySelectorAll(".key");
+    const lives = document.querySelectorAll(".tries img");
+    phraseDiv.innerHTML = "";
+    keys.forEach((key) => {
+      key.className = "key";
+      key.disabled = false;
+    });
+  }
+
+  /**
+   * Handles onscreen keyboard button clicks
+   * @param (HTMLButtonElement) button - The clicked button element
+   */
+  handleInteraction(button) {
+    button.disabled = true;
+    if (this.activePhrase.checkLetter(button.textContent)) {
+      button.classList.add("chosen");
+      this.activePhrase.showMatchedLetter(button.textContent);
+      if (this.checkForWin()) {
+        this.gameOver(true);
+      }
+    } else {
+      button.classList.add("wrong");
+      this.removeLife();
     }
+  }
 }
